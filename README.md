@@ -6,4 +6,4 @@ This respository is currently under construction, i will share my work here in t
 ## Challenge Overview
 
 #Titanic Challenge
-![Titanc Challenge](/99_images/01_Titanic.jpg =250x250))
+![Titanc Challenge](/99_images/01_Titanic.jpg){:height="50%" width="50%"}
