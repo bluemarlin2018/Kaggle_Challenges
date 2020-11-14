@@ -156,7 +156,6 @@ def Feature_Analysis(df):
         part = np.round(df[col].count()/len(df[col])*100,2)
         print(col+": "+ str(part) +"%")
     
-    
     women = df[df['Sex']=='female']
     women_survived = women[women['Survived']==1]
     women_not_survived =women[women['Survived']==0]  
