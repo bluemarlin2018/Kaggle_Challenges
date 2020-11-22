@@ -16,6 +16,7 @@ import feature_utils
 # =============================================================================
 
 CLASSIFIER =  "RandomForest"
+FOLD = 10
 
 # =============================================================================
 # Training through K-folds on train data
@@ -34,7 +35,7 @@ X = df.drop(['Survived'],axis=1) #Drop target variable
 y = df['Survived'] #Define target variable
 
 #Determine best performing model through K-Folds and varying classifier
-classifier_utils.determine_model_performance(CLASSIFIER,X,y) #Submit selected classifier and data for K-fold performance analysis
+classifier_utils.determine_model_performance(CLASSIFIER,X,y,FOLD) #Submit selected classifier and data for K-fold performance analysis
 model = classifier_utils.get_model(CLASSIFIER, X,y) #train selected and parameter-tuned classifier on whole dataset
  
 # =============================================================================

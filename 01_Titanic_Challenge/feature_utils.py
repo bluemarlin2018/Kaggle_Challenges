@@ -41,13 +41,16 @@ def feature_selection(df):
     df = df.drop(['PassengerId'],axis=1)
     return df
 
+# def sensitive_na_fill(df):
+
+
 #Prepare data for classifier
 #Important to split train and test data for training before
 #Test data should not contain any information about train data through scaling 
 #Fare+Price: Fill Na with mean values and use standard scale
 def data_model_preparation(df):
-    df['Age'] = df['Age'].fillna(np.mean(df['Age']))
-    df['Fare'] = df['Fare'].fillna(np.mean(df['Fare']))
+    df['Age'] = df['Age'].fillna(np.mean(df['Age'])).copy()
+    df['Fare'] = df['Fare'].fillna(np.mean(df['Fare'])).copy()
     scaler = StandardScaler()
     df[['Age','Fare']] = scaler.fit_transform(df[['Age','Fare']]).copy()
     return df

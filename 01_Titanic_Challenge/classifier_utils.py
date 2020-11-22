@@ -68,33 +68,23 @@ def neural_network_classifier(X_train,y_train):
 # Model Section
 # =============================================================================
 
-def determine_model_performance(classifier,X,y):
+def determine_model_performance(classifier,X,y,fold):
     print("Determine Best K-Fold Perfomance for given Classifier: " + classifier)
-    max_fold = 12 
-    min_fold = 4
-    fold_accuracy = np.zeros(max_fold) #Accuracy array to store k-fold performance for each k
-
-    for fold in range(min_fold,max_fold):    
-        kf = KFold(n_splits=fold, shuffle=True, random_state=42) 
-        counter = 0
-        accuracy = np.zeros(kf.get_n_splits())
-        for train,test in kf.split(X):
-            X_train, X_test, y_train, y_test = X.iloc[train], X.iloc[test], y.iloc[train], y.iloc[test] 
-            
-            #Important to split train and test data for training before fillna and scaling
-            #Test data should not contain any information about train data through scaling
-            X_train = feature_utils.data_model_preparation(X_train) #Fare+Price: Fill Na with mean values and use standard scale
-            X_test = feature_utils.data_model_preparation(X_test)
-            k_Fold_classifier = classifierDict[classifier](X_train,y_train) #train selected classifier on K-fold train data
-            
-            y_pred=k_Fold_classifier.predict(X_test) #predict with selected classifier on K-fold test data
-            accuracy[counter] = metrics.accuracy_score(y_test, y_pred) #store accuracy of k-fold test data in array
-            counter+=1
-        fold_accuracy[fold-1]= accuracy.mean() #k-fold classifier performance for given k = mean accuracy over all k-folds for given k
-    print("Classifier: "+ classifier)
-    print("Maximum K-fold accuracy: " + str(fold_accuracy.max()))
-    print("Best performing K: " + str(min_fold - 1 + fold_accuracy.argmax()))
-
+    kf = KFold(n_splits=fold, shuffle=True, random_state=42) 
+    counter = 0
+    score = np.zeros(kf.get_n_splits()) 
+    for train,test in kf.split(X):
+        X_train, X_test, y_train, y_test = X.iloc[train], X.iloc[test], y.iloc[train], y.iloc[test] 
+        #Important to split train and test data for training before fillna and scaling
+        #Test data should not contain any information about train data through scaling
+        X_train = feature_utils.data_model_preparation(X_train) #Fare+Price: Fill Na with mean values and use standard scale
+        X_test = feature_utils.data_model_preparation(X_test)
+        k_Fold_classifier = classifierDict[classifier](X_train,y_train) #train selected classifier on K-fold train data
+        y_pred=k_Fold_classifier.predict(X_test) #predict with selected classifier on K-fold test data
+        score[counter] = metrics.accuracy_score(y_test, y_pred) #store accuracy of k-fold test data in array
+        counter+=1
+    print("Model Performance: " + str(score))
+    print("Model Performance: " + str(np.mean(score)))
 
 #Train model on whole dataset with given classifier
 def get_model(classifier,X,y):
